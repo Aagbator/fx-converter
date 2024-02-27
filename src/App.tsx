@@ -1,28 +1,24 @@
-import React from "react";
-import logo from "./logo.svg";
+import {
+  Route,
+  Routes,
+  BrowserRouter
+} from "react-router-dom";
 import "./App.css";
+import { Layout } from "./hoc/Layout/Layout";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-
-        <h1 className="text-3xl font-bold underline text-red-600">
-          Simple React Typescript Tailwind Sample
-        </h1>
-      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<></>} />
+            <Route path="/euro-usd-details" element={<></>} />
+            <Route path="/euro-gbp-details" element={<></>} />
+            <Route path="*" element={<></>} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
