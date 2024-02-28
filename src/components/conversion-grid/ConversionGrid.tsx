@@ -7,7 +7,7 @@ type CurrencyRatesObject = {
 };
 
 const CurrencyGrid: React.FC = () => {
-  const { currencyRates } = useConverter();
+  const { currencyRates, amount } = useConverter();
 
   const arrayOfCurrencyRates: CurrencyRatesObject[] = Object.entries(
     currencyRates || []
@@ -25,7 +25,7 @@ const CurrencyGrid: React.FC = () => {
             className="w-1/3 border-2 border-gray-200 rounded-lg bg-white p-5"
           >
             <h3 className="font-bold">{currency}</h3>
-            <p>{rate}</p>
+            <p>{rate * amount}</p>
           </div>
         );
       })}

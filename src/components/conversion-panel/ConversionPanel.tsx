@@ -14,14 +14,14 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
     amount,
     fromCurrency,
     toCurrency,
+    convertedAmount,
     setAmount,
     setFromCurrency,
     setToCurrency,
     swapCurrencies,
     getToCurrencyExchangeRate,
+    convertCurrency,
   } = useConverter();
-
-  const [convertedResult, setConvertedResult] = React.useState<number>();
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -49,10 +49,7 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
-    if (getToCurrencyExchangeRate() !== undefined && !isNaN(amount)) {
-      const result = amount * getToCurrencyExchangeRate()!;
-      setConvertedResult(result);
-    }
+    convertCurrency();
   };
 
   return (
@@ -145,7 +142,7 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
             1 {fromCurrency} - {getToCurrencyExchangeRate()} {toCurrency}
           </p>
           <p className="mt-2 font-extrabold text-2xl">
-            {convertedResult ? `${convertedResult} ${toCurrency}` : ""}
+            {convertedAmount ? `${convertedAmount} ${toCurrency}` : ""}
           </p>
           {!isViewMode && (
             <Link

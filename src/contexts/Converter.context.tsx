@@ -26,12 +26,14 @@ interface ConverterContextType {
   fromCurrency: string;
   toCurrency: string;
   currencyRates: CurrencyRates | undefined;
+  convertedAmount: number | undefined;
   setAmount: (newAmount: number) => void;
   setFromCurrency: (newFromCurrency: Currency) => void;
   setToCurrency: (newToCurrency: Currency) => void;
   swapCurrencies: () => void;
   getFromCurrencyText: () => string;
   getToCurrencyExchangeRate: () => number | undefined;
+  convertCurrency: () => void;
 }
 
 const ConverterContext = createContext<ConverterContextType>({
@@ -40,12 +42,14 @@ const ConverterContext = createContext<ConverterContextType>({
   fromCurrency: "EUR",
   toCurrency: "USD",
   currencyRates: undefined,
+  convertedAmount: undefined,
   setAmount: () => {},
   setFromCurrency: () => {},
   setToCurrency: () => {},
   swapCurrencies: () => {},
   getFromCurrencyText: () => "",
   getToCurrencyExchangeRate: () => undefined,
+  convertCurrency: () => {},
 });
 
 export const useConverter = () =>
@@ -57,6 +61,7 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currencyRates, setCurrencyRates] = useState<CurrencyRates>();
   const [currencySymbols, setCurrencySymbols] = useState<CurrencySymbol>();
   const [amount, setAmount] = useState<number>(1);
+  const [convertedAmount, setConvertedAmount] = useState<number>();
   const [fromCurrency, setFromCurrency] = useState<Currency>("EUR");
   const [toCurrency, setToCurrency] = useState<Currency>("USD");
 
@@ -123,6 +128,13 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
     return currencyRates ? currencyRates[toCurrency] : undefined;
   };
 
+  const convertCurrency = (): void => {
+    if (!!getToCurrencyExchangeRate()) {
+      const convertedAmount = amount * getToCurrencyExchangeRate()!;
+      setConvertedAmount(convertedAmount);
+    }
+  }
+
   return (
     <ConverterContext.Provider
       value={{
@@ -131,12 +143,14 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
         amount,
         fromCurrency,
         toCurrency,
+        convertedAmount,
         setAmount,
         setFromCurrency,
         setToCurrency,
         swapCurrencies,
         getFromCurrencyText,
         getToCurrencyExchangeRate,
+        convertCurrency,
       }}
     >
       {children}
