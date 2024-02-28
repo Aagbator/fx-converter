@@ -1,7 +1,5 @@
-import React from "react";
 import Breadcrump from "../../components/breadcrump/Breadcrump";
 import CurrencyConverter from "../../components/conversion-panel/ConversionPanel";
-import CurrencyGrid from "../../components/conversion-grid/ConversionGrid";
 import { useConverter } from "../../contexts/Converter.context";
 
 export default function Details() {
@@ -13,7 +11,9 @@ export default function Details() {
     <div>
       <Breadcrump title={title} />
       <CurrencyConverter />
-      <CurrencyGrid />
+      <div className="w-full max-w-lg mx-auto mt-5 p-20  border-2">
+        <h2 className="text-2xl text-gray-400">Currency chart History</h2>
+      </div>
     </div>
   );
 }
