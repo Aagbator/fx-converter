@@ -2,7 +2,13 @@ import React from "react";
 import { Currency, useConverter } from "../../contexts/Converter.context";
 import { Link } from "react-router-dom";
 
-const CurrencyConverter: React.FC = () => {
+interface CurrencyConverterProps {
+  isViewMode?: boolean;
+}
+
+const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
+  isViewMode,
+}) => {
   const {
     currencies,
     amount,
@@ -57,6 +63,7 @@ const CurrencyConverter: React.FC = () => {
             <label className="label">From</label>
             <div className="relative">
               <select
+                disabled={isViewMode}
                 className="select"
                 value={fromCurrency}
                 onChange={handleFromCurrencyChange}
@@ -120,12 +127,14 @@ const CurrencyConverter: React.FC = () => {
         <div className="flex my-5 justify-between items-center">
           <p className="text-sm font-medium">1 EUR - 1 USD</p>
           <p className="mt-2 font-extrabold text-3xl">20.00 USD</p>
-          <Link
-            to={`/details?from=${fromCurrency}&to=${toCurrency}`}
-            className="font-medium text-blue-500 underline hover:text-blue-700"
-          >
-            More details →
-          </Link>
+          {!isViewMode && (
+            <Link
+              to={`/details?from=${fromCurrency}&to=${toCurrency}`}
+              className="font-medium text-blue-500 underline hover:text-blue-700"
+            >
+              More details →
+            </Link>
+          )}
         </div>
       </form>
     </>
