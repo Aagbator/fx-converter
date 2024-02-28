@@ -18,7 +18,10 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
     setFromCurrency,
     setToCurrency,
     swapCurrencies,
+    getToCurrencyExchangeRate,
   } = useConverter();
+
+  const [convertedResult, setConvertedResult] = React.useState<number>();
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -41,6 +44,17 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
     event.preventDefault();
     swapCurrencies();
   };
+
+  const handleConvertCurrency = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    if (getToCurrencyExchangeRate() !== undefined && !isNaN(amount)) {
+      const result = amount * getToCurrencyExchangeRate()!;
+      setConvertedResult(result);
+    }
+  };
+
   return (
     <>
       <form className="w-full max-w-lg mx-auto">
@@ -121,12 +135,18 @@ const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
         </div>
 
         <div className="flex flex-wrap my-5 items-center">
-          <button className="w-full btn">Convert</button>
+          <button onClick={handleConvertCurrency} className="w-full btn">
+            Convert
+          </button>
         </div>
 
         <div className="flex my-5 justify-between items-center">
-          <p className="text-sm font-medium">1 EUR - 1 USD</p>
-          <p className="mt-2 font-extrabold text-3xl">20.00 USD</p>
+          <p className="text-sm font-medium">
+            1 {fromCurrency} - {getToCurrencyExchangeRate()} {toCurrency}
+          </p>
+          <p className="mt-2 font-extrabold text-2xl">
+            {convertedResult ? `${convertedResult} ${toCurrency}` : ""}
+          </p>
           {!isViewMode && (
             <Link
               to={`/details?from=${fromCurrency}&to=${toCurrency}`}

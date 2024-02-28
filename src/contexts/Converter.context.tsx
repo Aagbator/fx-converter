@@ -31,6 +31,7 @@ interface ConverterContextType {
   setToCurrency: (newToCurrency: Currency) => void;
   swapCurrencies: () => void;
   getFromCurrencyText: () => string;
+  getToCurrencyExchangeRate: () => number | undefined;
 }
 
 const ConverterContext = createContext<ConverterContextType>({
@@ -44,6 +45,7 @@ const ConverterContext = createContext<ConverterContextType>({
   setToCurrency: () => {},
   swapCurrencies: () => {},
   getFromCurrencyText: () => "",
+  getToCurrencyExchangeRate: () => undefined,
 });
 
 export const useConverter = () =>
@@ -95,7 +97,7 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
     const fetchCurrencies = async () => {
       try {
         const ratesResponse = await fetch(
-          `${baseUrl}latest?access_key=${process.env.REACT_APP_FIXER_ACCESS_KEY}&symbols=${currencyStr}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`
+          `${baseUrl}latest?access_key=${process.env.REACT_APP_FIXER_ACCESS_KEY}&base=${fromCurrency}&symbols=${currencyStr}`
         );
         const ratesJson: { rates: CurrencyRates } = await ratesResponse.json();
         console.log(ratesJson.rates);
@@ -106,7 +108,7 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     fetchCurrencies();
-  }, []);
+  }, [fromCurrency]);
 
   const swapCurrencies = (): void => {
     setFromCurrency(toCurrency);
@@ -115,6 +117,10 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const getFromCurrencyText = (): string => {
     return currencySymbols ? currencySymbols[fromCurrency] : "";
+  };
+
+  const getToCurrencyExchangeRate = (): number | undefined => {
+    return currencyRates ? currencyRates[toCurrency] : undefined;
   };
 
   return (
@@ -130,6 +136,7 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
         setToCurrency,
         swapCurrencies,
         getFromCurrencyText,
+        getToCurrencyExchangeRate,
       }}
     >
       {children}
