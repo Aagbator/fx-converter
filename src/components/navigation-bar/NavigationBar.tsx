@@ -9,10 +9,10 @@ const NavigationBar: React.FC = () => {
       </Link>
       <ul className="flex space-x-2">
         <li className="border-gray-900 border-2 p-2 font-semibold">
-          <Link to="/euro-usd-details">EUR - USD details</Link>
+          <Link to="/details?from=EUR&to=USD">EUR - USD details</Link>
         </li>
         <li className="border-gray-900 border-2 p-2 font-semibold">
-          <Link to="/euro-gbp-details">EUR - GBP details</Link>
+          <Link to="/details?from=EUR&to=GBP">EUR - GBP details</Link>
         </li>
       </ul>
     </nav>
