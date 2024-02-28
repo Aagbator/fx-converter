@@ -3,6 +3,7 @@ import "./App.css";
 import { Layout } from "./hoc/Layout/Layout";
 import Home from "./pages/home/Home";
 import { ConverterProvider } from "./contexts/Converter.context";
+import Details from "./pages/details/Details";
 
 function App() {
   return (
@@ -12,8 +13,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home></Home>} />
-              <Route path="/euro-usd-details" element={<></>} />
-              <Route path="/euro-gbp-details" element={<></>} />
+              <Route path="/details" element={<Details />} />
               <Route path="*" element={<></>} />
             </Route>
           </Routes>
