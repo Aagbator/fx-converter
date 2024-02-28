@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type Currency =
+export type Currency =
   | "USD"
   | "EUR"
   | "JPY"
@@ -88,7 +88,7 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
     "AUD",
     "CAD",
     "CHF",
-    "CNH",
+    "CNY",
     "HKD",
     "NZD",
   ];
