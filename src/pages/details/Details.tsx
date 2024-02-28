@@ -2,21 +2,23 @@ import { useLocation } from "react-router-dom";
 import Breadcrump from "../../components/breadcrump/Breadcrump";
 import CurrencyConverter from "../../components/conversion-panel/ConversionPanel";
 import { Currency, useConverter } from "../../contexts/Converter.context";
+import { useEffect } from "react";
 
 export default function Details() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const { setFromCurrency, setToCurrency, fromCurrency, getFromCurrencyText } =
     useConverter();
-
   const title = `${fromCurrency} - ${getFromCurrencyText()}`;
   const fromVal = queryParams.get("from");
   const toVal = queryParams.get("to");
 
-  if (fromVal && toVal) {
-    setFromCurrency(fromVal as Currency);
-    setToCurrency(toVal as Currency);
-  }
+  useEffect(() => {
+    if (fromVal && toVal) {
+      setFromCurrency(fromVal as Currency);
+      setToCurrency(toVal as Currency);
+    }
+  }, [fromVal, toVal]);
 
   return (
     <div>
