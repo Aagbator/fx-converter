@@ -1,5 +1,6 @@
 import React from "react";
 import { Currency, useConverter } from "../../contexts/Converter.context";
+import { Link } from "react-router-dom";
 
 const CurrencyConverter: React.FC = () => {
   const {
@@ -119,9 +120,12 @@ const CurrencyConverter: React.FC = () => {
         <div className="flex my-5 justify-between items-center">
           <p className="text-sm font-medium">1 EUR - 1 USD</p>
           <p className="mt-2 font-extrabold text-3xl">20.00 USD</p>
-          <button className="font-medium text-blue-500 underline hover:text-blue-700">
+          <Link
+            to={`/details?from=${fromCurrency}&to=${toCurrency}`}
+            className="font-medium text-blue-500 underline hover:text-blue-700"
+          >
             More details →
-          </button>
+          </Link>
         </div>
       </form>
     </>
