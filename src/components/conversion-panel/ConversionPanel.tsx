@@ -30,6 +30,10 @@ const CurrencyConverter: React.FC = () => {
     setToCurrency(event.target.value as Currency);
   };
 
+  const handleCurrencySwap = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    swapCurrencies();
+  };
   return (
     <>
       <form className="w-full max-w-lg mx-auto">
@@ -75,7 +79,7 @@ const CurrencyConverter: React.FC = () => {
           </div>
           <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <button
-              onClick={swapCurrencies}
+              onClick={handleCurrencySwap}
               className="capitalize font-extrabold"
             >
               Swap
