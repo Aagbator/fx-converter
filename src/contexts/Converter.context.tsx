@@ -25,7 +25,7 @@ interface ConverterContextType {
   amount: number;
   fromCurrency: string;
   toCurrency: string;
-  currencyRates: CurrencyRates;
+  currencyRates: CurrencyRates | undefined;
   setAmount: (newAmount: number) => void;
   setFromCurrency: (newFromCurrency: Currency) => void;
   setToCurrency: (newToCurrency: Currency) => void;
@@ -38,7 +38,7 @@ const ConverterContext = createContext<ConverterContextType>({
   amount: 1,
   fromCurrency: "EUR",
   toCurrency: "USD",
-  currencyRates: {} as CurrencyRates,
+  currencyRates: undefined,
   setAmount: () => {},
   setFromCurrency: () => {},
   setToCurrency: () => {},
@@ -52,30 +52,8 @@ export const useConverter = () =>
 export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [currencyRates, setCurrencyRates] = useState<CurrencyRates>({
-    USD: 1.081625,
-    CAD: 1.469036,
-    GBP: 0.855143,
-    JPY: 162.968416,
-    EUR: 1,
-    AUD: 234,
-    CHF: 102,
-    CNY: 192,
-    HKD: 200,
-    NZD: 345,
-  });
-  const [currencySymbols, setCurrencySymbols] = useState<CurrencySymbol>({
-    AUD: "Australian Dollar",
-    CAD: "Canadian Dollar",
-    CHF: "Swiss Franc",
-    CNY: "Chinese Yuan",
-    EUR: "Euro",
-    GBP: "British Pound Sterling",
-    HKD: "Hong Kong Dollar",
-    JPY: "Japanese Yen",
-    NZD: "New Zealand Dollar",
-    USD: "United States Dollar",
-  });
+  const [currencyRates, setCurrencyRates] = useState<CurrencyRates>();
+  const [currencySymbols, setCurrencySymbols] = useState<CurrencySymbol>();
   const [amount, setAmount] = useState<number>(1);
   const [fromCurrency, setFromCurrency] = useState<Currency>("EUR");
   const [toCurrency, setToCurrency] = useState<Currency>("USD");
@@ -94,6 +72,7 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
   ];
 
   const baseUrl = "http://data.fixer.io/api/";
+  const currencyStr = currencies.join(",");
 
   useEffect(() => {
     const fetchCurrencySymbols = async () => {
@@ -109,23 +88,24 @@ export const ConverterProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
-    //fetchCurrencySymbols();
+    fetchCurrencySymbols();
   }, []);
 
   useEffect(() => {
     const fetchCurrencies = async () => {
       try {
         const ratesResponse = await fetch(
-          `${baseUrl}latest?access_key=${process.env.REACT_APP_FIXER_ACCESS_KEY}&symbols=USD,CAD,GBP,JPY,EUR&from=EUR&to=USD,JPY,GBP,AUD,CAD,CHF,CNH,HKD,NZD&amount=1`
+          `${baseUrl}latest?access_key=${process.env.REACT_APP_FIXER_ACCESS_KEY}&symbols=${currencyStr}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}`
         );
         const ratesJson: { rates: CurrencyRates } = await ratesResponse.json();
+        console.log(ratesJson.rates);
         setCurrencyRates(ratesJson.rates);
       } catch (error) {
         console.error("Error fetching currencies:", error);
       }
     };
 
-    // fetchCurrencies();
+    fetchCurrencies();
   }, []);
 
   const swapCurrencies = (): void => {

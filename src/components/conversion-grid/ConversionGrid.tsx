@@ -10,7 +10,7 @@ const CurrencyGrid: React.FC = () => {
   const { currencyRates } = useConverter();
 
   const arrayOfCurrencyRates: CurrencyRatesObject[] = Object.entries(
-    currencyRates
+    currencyRates || []
   ).map(([currency, rate]) => ({
     currency,
     rate,
